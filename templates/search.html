@@ -11,6 +11,12 @@ Search results for {{ SITENAME|striptags|e }} blog.
 {% block meta_tags_in_head %}
 {{ super() }}
 {% from '_includes/_defaults.html' import FEATURED_IMAGE, SEARCH_URL with context %}
+
+{% if PLUGINS and 'pelican.plugins.search' in PLUGINS %}
+	<script src="https://files.stork-search.net/releases/v1.6.0/stork.js"></script>
+	<link rel="stylesheet" href="https://files.stork-search.net/releases/v1.6.0/basic.css" />
+{% endif %}
+
 <meta property="og:title" content="Search · {{ SITENAME|striptags|e }}"/>
 <meta name="twitter:title" content="Search · {{ SITENAME|striptags|e }}">
 <meta property="og:url" content="{{ SITEURL }}/{{ SEARCH_URL }}" />
@@ -25,6 +31,7 @@ Search results for {{ SITENAME|striptags|e }} blog.
 {% endblock meta_tags_in_head %}
 
 {% block content %}
+{% if PLUGINS and 'pelican.plugins.tipue_search' in PLUGINS %}
 <div class="row-fluid">
     <header id="lunr-search-result-heading" class="page-header span10 offset2">
     </header>
@@ -36,11 +43,51 @@ Search results for {{ SITENAME|striptags|e }} blog.
         </div>
     </div>
 </div>
+{% else %}
+<!-- this is here to make the core .js code function without updating it (for now) -->
+<div id="lunr-search-result-heading" class="hidden"></div>
+<div id="lunr-search-result" class="hidden"></div>
+{% endif %}
+
+{% if PLUGINS and 'pelican.plugins.search' in PLUGINS %}
+    <input id='site2search' data-stork="site2search" />
+    <div data-stork="site2search-output"></div>
+{% endif %}
 {% endblock content %}
 
 {% block script %}
-    {% if PLUGINS and 'tipue_search' in PLUGINS %}
+    {% if PLUGINS and 'pelican.plugins.tipue_search' in PLUGINS %}
         <script src="{{ SITEURL }}/tipuesearch_content.js"></script>
+    {% else %}
+        <script>
+            <!-- this is here to make the core .js code function without updating it (for now) -->
+            var tipuesearch = { "pages": [ {"title": "Title", "text": "text", "tags": "tags", "url": "/" } ] };
+        </script>
     {% endif %}
+
+    <!--
+    // PLUGINS
+    {{ PLUGINS }}
+    // PLUGINS
+    -->
+
+    {% if PLUGINS and 'pelican.plugins.search' in PLUGINS %}
+        <script>
+            stork.register("site2search", "/search-index.st")
+        </script>
+        <script>
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('q')) {
+                    const q = urlParams.get('q');
+                    console.log("search page 'q' parameter = ", q);
+                    input = document.getElementById('site2search');
+                    input.focus()
+                    input.value = q;
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    // input.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+        </script>
+    {% endif %}
+
 {{ super() }}
 {% endblock script %}

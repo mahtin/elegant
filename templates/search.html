@@ -31,28 +31,47 @@ Search results for {{ SITENAME|striptags|e }} blog.
 {% endblock meta_tags_in_head %}
 
 {% block content %}
-{% if PLUGINS and 'pelican.plugins.tipue_search' in PLUGINS %}
-<div class="row-fluid">
-    <header id="lunr-search-result-heading" class="page-header span10 offset2">
-    </header>
-</div>
+    <article itemscope>
+        <div class="row-fluid">
+            <header class="page-header span10 offset2">
+                <h1>
+                    <a href="{{ SITEURL }}/{{ SEARCH_URL }}">
+                        Search
+                        <small class="subtitle">
+                            results for {{ SITENAME|striptags|e }} website.
+                        </small>
+                    </a>
+                </h1>
+            </header>
 
-<div class="row-fluid">
-    <div class="span8 offset2">
-        <div id="lunr-search-result" >
+            <div class="span8 offset2 article-content">
+
+                {% if PLUGINS and 'pelican.plugins.tipue_search' in PLUGINS %}
+                    <div class="row-fluid">
+                        <header id="lunr-search-result-heading" class="page-header span10 offset2">
+                        </header>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span8 offset2">
+                            <div id="lunr-search-result" >
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- this is here to make the core .js code function without updating it (for now) -->
+                    <div id="lunr-search-result-heading" class="hidden"></div>
+                    <div id="lunr-search-result" class="hidden"></div>
+                {% endif %}
+
+                {% if PLUGINS and 'pelican.plugins.search' in PLUGINS %}
+                    Search: <input id='site2search' data-stork="site2search" />
+                    <p><div data-stork="site2search-output"></div></p>
+                {% endif %}
+
+            </div>
         </div>
-    </div>
-</div>
-{% else %}
-<!-- this is here to make the core .js code function without updating it (for now) -->
-<div id="lunr-search-result-heading" class="hidden"></div>
-<div id="lunr-search-result" class="hidden"></div>
-{% endif %}
-
-{% if PLUGINS and 'pelican.plugins.search' in PLUGINS %}
-    <input id='site2search' data-stork="site2search" />
-    <div data-stork="site2search-output"></div>
-{% endif %}
+    </article>
 {% endblock content %}
 
 {% block script %}
@@ -64,12 +83,6 @@ Search results for {{ SITENAME|striptags|e }} blog.
             var tipuesearch = { "pages": [ {"title": "Title", "text": "text", "tags": "tags", "url": "/" } ] };
         </script>
     {% endif %}
-
-    <!--
-    // PLUGINS
-    {{ PLUGINS }}
-    // PLUGINS
-    -->
 
     {% if PLUGINS and 'pelican.plugins.search' in PLUGINS %}
         <script>

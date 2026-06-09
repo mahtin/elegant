@@ -65,7 +65,7 @@ Search results for {{ SITENAME|striptags|e }} blog.
                 {% endif %}
 
                 {% if PLUGINS and 'pelican.plugins.search' in PLUGINS %}
-                    Search: <input id='site2search' data-stork="site2search" />
+                    Search: <input id='site2search' data-stork="site2search" placeholder="Search" />
                     <p><div data-stork="site2search-output"></div></p>
                 {% endif %}
 
@@ -89,16 +89,21 @@ Search results for {{ SITENAME|striptags|e }} blog.
             stork.register("site2search", "/search-index.st")
         </script>
         <script>
+            window.addEventListener('load', () => {
                 const urlParams = new URLSearchParams(window.location.search);
                 if (urlParams.has('q')) {
+                    const inputField = document.getElementById('site2search');
+                    const inputEvent = new Event('input', { bubbles: true, cancelable: true });
                     const q = urlParams.get('q');
                     console.log("search page 'q' parameter = ", q);
-                    input = document.getElementById('site2search');
-                    input.focus()
-                    input.value = q;
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                    // input.dispatchEvent(new Event('change', { bubbles: true }));
+                    inputField.focus()
+                    setTimeout(() => {
+                        // this delay is a hack!
+                        inputField.value += q;
+                        inputField.dispatchEvent(inputEvent);
+                    }, 200);
                 }
+            });
         </script>
     {% endif %}
 

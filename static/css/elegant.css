@@ -97,6 +97,11 @@ ul.list-projects,
 .article-content,
 div.recent-posts p {
   text-align: justify;
+  hyphens:auto;
+  hyphenate-limit-chars:6 3 3;
+  -webkit-hyphens:auto;
+  -webkit-hyphenate-limit-before:3;
+  -webkit-hyphenate-limit-after:3;
 }
 .article-content {
   max-width: 50em;

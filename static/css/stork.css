@@ -1,0 +1,11 @@
+/* for stork search plugin */
+.stork-message{font-family:var(--sansFontFamily);font-size:.963rem;}
+.stork-results{} 
+.stork-result{font-family:var(--sansFontFamily);font-size:.963rem;}
+.stork-title{color:#08c;text-decoration:none;}
+.stork-title:hover{color:#005580;}
+.stork-highlight{background:#eee;}
+.stork-excerpt-container{} 
+.stork-excerpt{color:#08c;font-size:.8rem;}
+.stork-excerpt:hover{color:#005580;}
+.stork-attribution{font-family:var(--sansFontFamily);font-size:.8rem;text-align:right;margin-left:auto;margin-right:unset;margin:3px0;}
